@@ -41,7 +41,15 @@ tags:
 
 1. 设置 Switch 容器: 在 ShareSets 中设置两套衰减，复制每一个相关的音频对象，应用不同的衰减曲线后放入 Switch 容器中，根据 State 的不同切换播放对应的音频
 
-2. 调用 SDK 函数: 在学习 WAAPI 的过程中，发现 soundengine 部分的 `setScalingFactor` API 的功能正好是控制游戏对象的缩放系数，依此来修改衰减的计算结果。因此在Unity脚本中直接调用对应的函数 `AkSoundEngine.SetScalingFactor()` 可达到控制衰减范围的效果
+2. 调用 SDK 函数: 在学习 WAAPI 的过程中，发现 soundengine 部分的 `setScalingFactor` API 的功能正好是控制游戏对象的缩放系数，依此来修改衰减的计算结果。因此在Unity脚本中直接调用对应的函数 `AkSoundEngine.SetScalingFactor()` 可达到控制衰减范围的效果，Unity 脚本实现如下：
+
+```ts
+void EnableTacticalHeadset()
+{
+	// Double the gameobject's sound pickup range
+	AkSoundEngine.SetScalingFactor(gameObject, 2.0f); 
+}
+```
 
 效果对比: 内存占用方面，由于**方法 1** 复制了一份同样的音频应用了不同的衰减，从 SoundBanks 的生成情况来看，相比**方法 2** 会额外占用大约 14% 的内存（3325.39KB → 3793.65KB，单个 Enemy GameObject 涉及的音频），在内存资源紧张的情况下要谨慎使用。从工作量来看，**方法 1** 需要给每一个相关的音频资源分配 Switch 容器、设置衰减、修改相关 Event 的引用对象，工作量比较大；**方法 2** 则只需要编写新的脚本引用 SDK 函数设定好所需的变化系数并应用至引擎中相关的预设体中即可。对于拾音功能的复现，两种方法的最终实现效果一致，**方法 1** 直接操作了音频对象，粒度更细，更适合需要精细制作的情况；而**方法 2** 是直接修改了相关游戏对象的衰减属性，更方便快捷。
 
