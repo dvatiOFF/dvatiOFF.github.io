@@ -46,8 +46,8 @@ tags:
 ```ts
 void EnableTacticalHeadset()
 {
-	// Double the gameobject's sound pickup range
-	AkSoundEngine.SetScalingFactor(gameObject, 2.0f); 
+    // Double the gameobject's sound pickup range
+    AkSoundEngine.SetScalingFactor(gameObject, 2.0f); 
 }
 ```
 
