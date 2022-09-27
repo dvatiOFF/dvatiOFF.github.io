@@ -7,7 +7,7 @@ header-style: text
 tags:
   - Wwise
   - Unity
-  - Audio Modules
+  - Game Audio
   - Reproduction
 ---
 
