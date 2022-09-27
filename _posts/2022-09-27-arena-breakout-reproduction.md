@@ -67,5 +67,21 @@ void EnableTacticalHeadset()
 
 ## 复现展示
 
-<iframe src="//player.bilibili.com/player.html?aid=303425834&bvid=BV1NP411n79H&cid=845139297&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="710" height="530"> </iframe>
+<style type='text/css'>
+.iframe-container {
+  padding-top: 56.25%;
+  position: relative;
+}
+.iframe-container iframe {
+   position: absolute;
+   height: 100%;
+   width: 100%;
+   top: 0;
+   left: 0;
+}
+</style>
+
+<div class="iframe-container">
+  <iframe src="//player.bilibili.com/player.html?aid=303425834&bvid=BV1NP411n79H&cid=845139297&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+</div>
 
