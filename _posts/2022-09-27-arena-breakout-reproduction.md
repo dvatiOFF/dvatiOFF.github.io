@@ -39,7 +39,7 @@ tags:
 
 最初通过发送 Event 修改 Bus 音量的复现并不符合暗区突围中的效果，因为拾音的设定是让玩家对关键声音听得更远而不是更响，之后意识到需要做的是在游戏运行时修改对应音频对象的衰减曲线 `Max Distance` 的值。又尝试了设置两种不同的衰减曲线，并通过 State 中的 `enable attenuation` 属性来切换音频及其对应总线的衰减来达到想要到效果，但也失败了，原因是衰减的计算需要 Listener 和 Emitter 之间的空间信息，但总线对象默认绑定在 Listener 上，所以计算总线衰减的 Distance 实际一直为 0，音量不会随距离发生变化。
 
-Wwise官方文档中关于为总线应用定位的情况特殊情况举了以下[例子](https://www.audiokinetic.com/zh/library/edge/?source=Help&id=applying_positioning_to_busses)：
+Wwise官方文档中为总线应用定位的特殊情况举了以下[例子](https://www.audiokinetic.com/zh/library/edge/?source=Help&id=applying_positioning_to_busses)：
 > 
 * 虚拟窃听或扩声系统：游戏中允许玩家使用隐藏式麦克风窥探其他玩家的系统。音频将被捕获并传输至地图另一端的一个虚拟扬声器。在对子混音应用 lo-fi 效果器后，可以对其进行空间化定位，听起来好像从扬声器发出一样。
 >
