@@ -2,7 +2,7 @@
 layout: post
 title: "暗区突围 - 战术耳机&防爆头盔音频模块的复现与思考"
 subtitle: "Arena Breakout - Reproduction of audio modules for tactical earphones and explosion-proof helmets"
-author: "Hux"
+author: "OFF"
 header-style: text
 tags:
   - Wwise
