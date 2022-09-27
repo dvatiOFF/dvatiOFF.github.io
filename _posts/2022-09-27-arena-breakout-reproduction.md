@@ -55,3 +55,7 @@ void EnableTacticalHeadset()
 
 效果对比: 内存占用方面，由于**方法 1** 复制了一份同样的音频应用了不同的衰减，从 SoundBanks 的生成情况来看，相比**方法 2** 会额外占用大约 14% 的内存（3325.39KB → 3793.65KB，单个 Enemy GameObject 涉及的音频），在内存资源紧张的情况下要谨慎使用。从工作量来看，**方法 1** 需要给每一个相关的音频资源分配 Switch 容器、设置衰减、修改相关 Event 的引用对象，工作量比较大；**方法 2** 则只需要编写新的脚本引用 SDK 函数设定好所需的变化系数并应用至引擎中相关的预设体中即可。对于拾音功能的复现，两种方法的最终实现效果一致，**方法 1** 直接操作了音频对象，粒度更细，更适合需要精细制作的情况；而**方法 2** 是直接修改了相关游戏对象的衰减属性，更方便快捷。
 
+## 复现展示
+
+<iframe src="//player.bilibili.com/player.html?aid=303425834&bvid=BV1NP411n79H&cid=845139297&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
