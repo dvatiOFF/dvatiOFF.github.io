@@ -11,7 +11,7 @@ tags:
   - Reproduction
 ---
 
-我在暑期实习时对两款竞品射击类手游的音频模块进行了对比分析，并针对暗区突围中独有的模块进行了复现，这篇文章是复现的思路和总结。
+之前对两款竞品射击类手游的音频模块进行了对比分析，并针对暗区突围的耳机头盔音频模块进行了复现。
 
 ## 音频模块分析
 
@@ -82,6 +82,6 @@ void EnableTacticalHeadset()
 </style>
 
 <div class="iframe-container">
-  <iframe src="//player.bilibili.com/player.html?aid=303425834&bvid=BV1NP411n79H&cid=845139297&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" high_quality=1 allowfullscreen="true"> </iframe>
+  <iframe src="//player.bilibili.com/player.html?aid=303425834&bvid=BV1NP411n79H&cid=845139297&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" high_quality="1" allowfullscreen="true"> </iframe>
 </div>
 
