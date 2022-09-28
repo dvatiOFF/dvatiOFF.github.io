@@ -82,6 +82,6 @@ void EnableTacticalHeadset()
 </style>
 
 <div class="iframe-container">
-  <iframe src="//player.bilibili.com/player.html?aid=303425834&bvid=BV1NP411n79H&cid=845139297&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+  <iframe src="//player.bilibili.com/player.html?aid=303425834&bvid=BV1NP411n79H&cid=845139297&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" high_quality=1 allowfullscreen="true"> </iframe>
 </div>
 
