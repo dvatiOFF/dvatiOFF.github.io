@@ -54,7 +54,7 @@ tags:
 		
 		<div class="iframe-container">
 <iframe src="//player.bilibili.com/player.html?aid=388987775&bvid=BV1Xd4y1i7Nh&cid=856375481&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-</div>
+		</div>
 
 	* 午后
 
@@ -62,7 +62,7 @@ tags:
 
 		<div class="iframe-container">
 <iframe src="//player.bilibili.com/player.html?aid=388949530&bvid=BV1rd4y1i7H6&cid=856377333&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-</div>
+		</div>
 		
 
 ### 天气
@@ -86,7 +86,7 @@ tags:
 	
 	<div class="iframe-container">
   	<iframe src="//player.bilibili.com/player.html?aid=261482077&bvid=BV1Qe411575E&cid=856370888&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-</div>
+	</div>
 
 * 打雷
 
@@ -95,7 +95,7 @@ tags:
 	
 	<div class="iframe-container">
 	<iframe src="//player.bilibili.com/player.html?aid=773875748&bvid=BV1Z14y1j7w3&cid=856369752&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-</div>
+	</div>
 
 ### 交通工具
 * 火车
@@ -105,7 +105,7 @@ tags:
 	
 	<div class="iframe-container">
 	<iframe src="//player.bilibili.com/player.html?aid=986463266&bvid=BV1s44y1f7Xi&cid=856369924&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-</div>
+	</div>
 
 ### 城市
 通过设定划分复杂的区域以及制定精妙的播放规则，R-Star 为玩家呈现了极具沉浸感的 20 世纪初美洲中西部城市声景。
@@ -119,13 +119,13 @@ tags:
 
 	<div class="iframe-container">
 <iframe src="//player.bilibili.com/player.html?aid=303928274&bvid=BV1bP41177pR&cid=856377947&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-</div>
+	</div>
 	
 	* 夜晚楼顶
 
 	<div class="iframe-container">
 <iframe src="//player.bilibili.com/player.html?aid=603881382&bvid=BV1YB4y1j7xi&cid=856378362&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-</div>
+	</div>
 
 * 空间切换
 
@@ -137,11 +137,10 @@ tags:
 		当玩家在封闭的室内（关门时），室外的大多数环境音效会被屏蔽，但能听到马车声和微弱的鸟类叫声。
 		当玩家开门后，所有环境音效恢复并在大约0.3秒内响度渐强至最大。
 		当门在打开时，根据玩家相对门的角度和距离，会对室外的环境音效的响度和声相做对应的处理，出门后也没有打开门之后所有声音一瞬间涌入的感觉。
-		
 
 		<div class="iframe-container">
 <iframe src="//player.bilibili.com/player.html?aid=773925780&bvid=BV1p14y177YU&cid=856371071&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-</div>
+		</div>
 	
 	* 巷子内外
 	
@@ -153,7 +152,7 @@ tags:
 		
 			<div class="iframe-container">
 <iframe src="//player.bilibili.com/player.html?aid=858890564&bvid=BV13V4y1L7e7&cid=856380434&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-</div>
+			</div>
 
 
 		* 进出巷子
@@ -162,7 +161,7 @@ tags:
 		
 			<div class="iframe-container">
 <iframe src="//player.bilibili.com/player.html?aid=561381508&bvid=BV17e4y1q7fc&cid=856379367&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-</div>
+			</div>
 
 ## 功能性
 
