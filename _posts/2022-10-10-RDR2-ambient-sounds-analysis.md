@@ -53,9 +53,23 @@ tags:
 
 ### 暴风雪声
 
-<style type='text/css'> .iframe-container { padding-top: 56.25%; position: relative; } .iframe-container iframe { position: absolute; height: 100%; width: 100%; top: 0; left: 0; } </style>
-<iframe src="//player.bilibili.com/player.html?aid=901388220&bvid=BV1CN4y1A7c8&cid=856365452&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" high_quality="1" allowfullscreen="true"> </iframe>
+<style type='text/css'>
+.iframe-container {
+  padding-top: 56.25%;
+  position: relative;
+}
+.iframe-container iframe {
+   position: absolute;
+   height: 100%;
+   width: 100%;
+   top: 0;
+   left: 0;
+}
+</style>
 
+<div class="iframe-container">
+  <iframe src="//player.bilibili.com/player.html?aid=901388220&bvid=BV1CN4y1A7c8&cid=856365452&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" high_quality="1" allowfullscreen="true"> </iframe>
+</div>
 
 ## 历史文化象征
 
