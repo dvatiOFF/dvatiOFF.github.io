@@ -10,6 +10,20 @@ tags:
   - Audio Modules Analysis
 ---
 
+<style type='text/css'>
+.iframe-container {
+  padding-top: 56.25%;
+  position: relative;
+}
+.iframe-container iframe {
+   position: absolute;
+   height: 100%;
+   width: 100%;
+   top: 0;
+   left: 0;
+}
+</style>
+
  从画面、声音到故事背景和游戏机制，荒野大镖客2 可能是目前人类所开发的所有游戏中真实度最高、沉浸感最强的一作。得益于R星在近二十年一项又一项跨世代大作的开发过程中迭代积累的经验技术，他们的音频团队在业内也堪称顶级。
  
  荒野大镖客2 暴露出的音频接口就有大约 600 个，对这样一个庞然大物的所有音频模块进行详尽的分析太过艰巨，本文尝试从感知性、功能性和历史文化象征三个角度展开，用一些具体的例子对其中涉及的环境声进行分析。
@@ -38,41 +52,16 @@ tags:
 		
 		鸟类最活跃的时间，此时环境声中鸟类叫声占比更多丰富度更高。
 		
-<style type='text/css'>
-.iframe-container {
-  padding-top: 56.25%;
-  position: relative;
-}
-.iframe-container iframe {
-   position: absolute;
-   height: 100%;
-   width: 100%;
-   top: 0;
-   left: 0;
-}
-</style>
-	
-<div class="iframe-container">
+
+	<div class="iframe-container">
   <iframe src="//player.bilibili.com/player.html?aid=388987775&bvid=BV1Xd4y1i7Nh&cid=856375481&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 </div>
-	
+</html>
+
 	* 午后
 
 		鸟类叫声更平静，种类也不如清晨丰富。
 
-<style type='text/css'>
-.iframe-container {
-  padding-top: 56.25%;
-  position: relative;
-}
-.iframe-container iframe {
-   position: absolute;
-   height: 100%;
-   width: 100%;
-   top: 0;
-   left: 0;
-}
-</style>
 	
 <div class="iframe-container">
   <iframe src="//player.bilibili.com/player.html?aid=388949530&bvid=BV1rd4y1i7H6&cid=856377333&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
@@ -97,69 +86,29 @@ tags:
 	空旷地带：风噪声大，也有可辨的远处的枝叶声。
 	空旷地带移动至树木附近：枝叶声渐强，最终枝叶声更突出。
 	
-	<style type='text/css'>
-	.iframe-container {
-	  padding-top: 56.25%;
-	  position: relative;
-	}
-	.iframe-container iframe {
-	   position: absolute;
-	   height: 100%;
-	   width: 100%;
-	   top: 0;
-	   left: 0;
-	}
-	</style>
 	
-	<div class="iframe-container">
-	  <iframe src="//player.bilibili.com/player.html?aid=261482077&bvid=BV1Qe411575E&cid=856370888&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-	</div>
+<div class="iframe-container">
+  	<iframe src="//player.bilibili.com/player.html?aid=261482077&bvid=BV1Qe411575E&cid=856370888&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+</div>
 
 * 打雷
 
 	雷暴本身的音效根据动画以及距离持续大约2-3秒，后续的巨大混响相应持续15-20秒
 对其他环境声的影响：雷暴音效响起的那几秒会屏蔽绝大多数原本的环境声（如鸟叫声、马车声，路人谈话声等；但仍能听到教堂钟声、火车站点铃声等优先级很高的音效）， 环境声在混响开始大约5-8秒后逐渐恢复。
-
-	<style type='text/css'>
-	.iframe-container {
-	  padding-top: 56.25%;
-	  position: relative;
-	}
-	.iframe-container iframe {
-	   position: absolute;
-	   height: 100%;
-	   width: 100%;
-	   top: 0;
-	   left: 0;
-	}
-	</style>
 	
-	<div class="iframe-container">
-	  <iframe src="//player.bilibili.com/player.html?aid=773875748&bvid=BV1Z14y1j7w3&cid=856369752&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-	</div>
+<div class="iframe-container">
+  <iframe src="//player.bilibili.com/player.html?aid=773875748&bvid=BV1Z14y1j7w3&cid=856369752&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+</div>
 
 ### 交通工具
 * 火车
 
 	火车驶近鸣笛后，环境声中的鸟类叫声立刻停止，驶远后鸟类叫声逐渐恢复。
 	
-	<style type='text/css'>
-	.iframe-container {
-	  padding-top: 56.25%;
-	  position: relative;
-	}
-	.iframe-container iframe {
-	   position: absolute;
-	   height: 100%;
-	   width: 100%;
-	   top: 0;
-	   left: 0;
-	}
-	</style>
 	
-	<div class="iframe-container">
-	  <iframe src="//player.bilibili.com/player.html?aid=986463266&bvid=BV1s44y1f7Xi&cid=856369924&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-	</div>
+<div class="iframe-container">
+  <iframe src="//player.bilibili.com/player.html?aid=986463266&bvid=BV1s44y1f7Xi&cid=856369924&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+</div>
 
 ### 城市
 通过设定划分复杂的区域以及制定精妙的播放规则，R-Star 为玩家呈现了极具沉浸感的 20 世纪初美洲中西部城市声景。
@@ -168,6 +117,18 @@ tags:
 
 	城市中的声景由各类复杂的点声源构成，大多音效都播放在玩家视线之外
 播放的位置和内容随机性极高，几乎没有重复内容，比如城市中可以听到大量日常物品类的声音，营造了真实的生活气息。
+
+	* 白天街边
+
+	<div class="iframe-container">
+		<iframe src="//player.bilibili.com/player.html?aid=303928274&bvid=BV1bP41177pR&cid=856377947&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+	</div>
+	
+	* 夜晚楼顶
+
+	<div class="iframe-container">
+		<iframe src="//player.bilibili.com/player.html?aid=603881382&bvid=BV1YB4y1j7xi&cid=856378362&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+	</div>
 
 * 空间切换
 
@@ -180,24 +141,12 @@ tags:
 		当玩家开门后，所有环境音效恢复并在大约0.3秒内响度渐强至最大。
 		当门在打开时，根据玩家相对门的角度和距离，会对室外的环境音效的响度和声相做对应的处理，出门后也没有打开门之后所有声音一瞬间涌入的感觉。
 		
-		<style type='text/css'>
-		.iframe-container {
-		  padding-top: 56.25%;
-		  position: relative;
-		}
-		.iframe-container iframe {
-		   position: absolute;
-		   height: 100%;
-		   width: 100%;
-		   top: 0;
-		   left: 0;
-		}
-		</style>
-		
-		<div class="iframe-container">
-		  <iframe src="//player.bilibili.com/player.html?aid=773925780&bvid=BV1p14y177YU&cid=856371071&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-		</div>
-		
+
+	<div class="iframe-container">
+	<iframe src="//player.bilibili.com/player.html?aid=773925780&bvid=BV1p14y177YU&cid=856371071&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+</div>
+</html>
+	
 	* 巷子内外
 	
 		城市中所有巷中的区域也有对应的混音和播放规则。
@@ -205,47 +154,20 @@ tags:
 		* 巷子深处
 			
 			巷子深处的环境更安静，在这里听到的所有巷外音效整体响度降低，也能听到更多外部听不到的生物音效，比如虫鸣、各类鸟叫、猫叫等。
-	
-			<style type='text/css'>
-			.iframe-container {
-			  padding-top: 56.25%;
-			  position: relative;
-			}
-			.iframe-container iframe {
-			   position: absolute;
-			   height: 100%;
-			   width: 100%;
-			   top: 0;
-			   left: 0;
-			}
-			</style>
-				
-			<div class="iframe-container">
-			  <iframe src="//player.bilibili.com/player.html?aid=858890564&bvid=BV13V4y1L7e7&cid=856380434&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-			</div>
+		
+		<div class="iframe-container">
+	<iframe src="//player.bilibili.com/player.html?aid=858890564&bvid=BV13V4y1L7e7&cid=856380434&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+	</div>
+</html>
 
 		* 进出巷子
 
 			和开着门情况下的室内外变化规则类似，但响度和声响的渐变更柔和。
 		
-			<style type='text/css'>
-			.iframe-container {
-			  padding-top: 56.25%;
-			  position: relative;
-			}
-			.iframe-container iframe {
-			   position: absolute;
-			   height: 100%;
-			   width: 100%;
-			   top: 0;	
-			   left: 0;
-			}
-			</style>
-				
-			<div class="iframe-container">
-			  <iframe src="//player.bilibili.com/player.html?aid=561381508&bvid=BV17e4y1q7fc&cid=856379367&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
-			</div>
-
+	<div class="iframe-container">
+		<iframe src="//player.bilibili.com/player.html?aid=561381508&bvid=BV17e4y1q7fc&cid=856379367&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+	</div>
+</html>
 
 ## 功能性
 
@@ -263,19 +185,6 @@ tags:
 ### 暴风雪声
 初章因剧情一直处于雪天之中，当玩家离营地超出一定距离后，会触发暴风雪天气，玩家血量持续降低，软强制玩家回到划定区域内。与上文提到的阵风音效不同，触发的暴风雪声高频的呼啸更突出，更符合暴风雪声的听感。
 
-<style type='text/css'>
-.iframe-container {
-  padding-top: 56.25%;
-  position: relative;
-}
-.iframe-container iframe {
-   position: absolute;
-   height: 100%;
-   width: 100%;
-   top: 0;
-   left: 0;
-}
-</style>
 
 <div class="iframe-container">
   <iframe src="//player.bilibili.com/player.html?aid=901388220&bvid=BV1CN4y1A7c8&cid=856365452&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" high_quality="1" allowfullscreen="true"> </iframe>
