@@ -37,10 +37,47 @@ tags:
 	* 清晨
 		
 		鸟类最活跃的时间，此时环境声中鸟类叫声占比更多丰富度更高。
+		
+<style type='text/css'>
+.iframe-container {
+  padding-top: 56.25%;
+  position: relative;
+}
+.iframe-container iframe {
+   position: absolute;
+   height: 100%;
+   width: 100%;
+   top: 0;
+   left: 0;
+}
+</style>
+	
+<div class="iframe-container">
+  <iframe src="//player.bilibili.com/player.html?aid=388987775&bvid=BV1Xd4y1i7Nh&cid=856375481&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+</div>
 	
 	* 午后
 
 		鸟类叫声更平静，种类也不如清晨丰富。
+
+<style type='text/css'>
+.iframe-container {
+  padding-top: 56.25%;
+  position: relative;
+}
+.iframe-container iframe {
+   position: absolute;
+   height: 100%;
+   width: 100%;
+   top: 0;
+   left: 0;
+}
+</style>
+	
+<div class="iframe-container">
+  <iframe src="//player.bilibili.com/player.html?aid=388949530&bvid=BV1rd4y1i7H6&cid=856377333&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+</div>
+		
 
 ### 天气
 * 雨
@@ -56,19 +93,73 @@ tags:
 	淡入淡出：强风的音效从起风至最强需大约 30 秒，期间禽类叫声完全停止，风停的淡出也需大约 30 秒，淡出过程中禽类叫声开始逐渐恢复。
 	
 	强风音效分层：1. 风噪（表现呼啸的两个中高频层；表现风力的低频层）2. 枝叶声（高层枝叶的较柔和的沙沙声；中低层枝叶表现风力的簌簌落落声）
-（这里枝叶层的声音可能随实际树木的不同有区分，比如阔叶树木和杉木，杉木就以柔和的沙沙声为主）。
-空旷地带：风噪声大，也有可辨的远处的枝叶声。
-空旷地带移动至树木附近：枝叶声渐强，最终枝叶声更突出。
+	这里枝叶层的声音可能随实际树木的不同有区分，比如阔叶树木和杉木，杉木就以柔和的沙沙声为主。
+	空旷地带：风噪声大，也有可辨的远处的枝叶声。
+	空旷地带移动至树木附近：枝叶声渐强，最终枝叶声更突出。
+	
+	<style type='text/css'>
+	.iframe-container {
+	  padding-top: 56.25%;
+	  position: relative;
+	}
+	.iframe-container iframe {
+	   position: absolute;
+	   height: 100%;
+	   width: 100%;
+	   top: 0;
+	   left: 0;
+	}
+	</style>
+	
+	<div class="iframe-container">
+	  <iframe src="//player.bilibili.com/player.html?aid=261482077&bvid=BV1Qe411575E&cid=856370888&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+	</div>
 
 * 打雷
 
 	雷暴本身的音效根据动画以及距离持续大约2-3秒，后续的巨大混响相应持续15-20秒
 对其他环境声的影响：雷暴音效响起的那几秒会屏蔽绝大多数原本的环境声（如鸟叫声、马车声，路人谈话声等；但仍能听到教堂钟声、火车站点铃声等优先级很高的音效）， 环境声在混响开始大约5-8秒后逐渐恢复。
 
+	<style type='text/css'>
+	.iframe-container {
+	  padding-top: 56.25%;
+	  position: relative;
+	}
+	.iframe-container iframe {
+	   position: absolute;
+	   height: 100%;
+	   width: 100%;
+	   top: 0;
+	   left: 0;
+	}
+	</style>
+	
+	<div class="iframe-container">
+	  <iframe src="//player.bilibili.com/player.html?aid=773875748&bvid=BV1Z14y1j7w3&cid=856369752&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+	</div>
+
 ### 交通工具
 * 火车
 
 	火车驶近鸣笛后，环境声中的鸟类叫声立刻停止，驶远后鸟类叫声逐渐恢复。
+	
+	<style type='text/css'>
+	.iframe-container {
+	  padding-top: 56.25%;
+	  position: relative;
+	}
+	.iframe-container iframe {
+	   position: absolute;
+	   height: 100%;
+	   width: 100%;
+	   top: 0;
+	   left: 0;
+	}
+	</style>
+	
+	<div class="iframe-container">
+	  <iframe src="//player.bilibili.com/player.html?aid=986463266&bvid=BV1s44y1f7Xi&cid=856369924&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+	</div>
 
 ### 城市
 通过设定划分复杂的区域以及制定精妙的播放规则，R-Star 为玩家呈现了极具沉浸感的 20 世纪初美洲中西部城市声景。
