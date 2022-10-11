@@ -140,25 +140,22 @@ tags:
 			&nbsp&nbsp&nbsp&nbsp<iframe src="//player.bilibili.com/player.html?aid=773925780&bvid=BV1p14y177YU&cid=856371071&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 		</div>
 	
-	* 巷子内外
-	
-		城市中所有巷中的区域也有对应的混音和播放规则。
 		
-		* 巷子深处
+	* 巷子深处
 			
-			巷子深处的环境更安静，在这里听到的所有巷外音效整体响度降低，也能听到更多外部听不到的生物音效，比如虫鸣、各类鸟叫、猫叫等。
+		巷子深处的环境更安静，在这里听到的所有巷外音效整体响度降低，也能听到更多外部听不到的生物音效，比如虫鸣、各类鸟叫、猫叫等。
 		
-			<div class="iframe-container">
-							<iframe src="//player.bilibili.com/player.html?aid=858890564&bvid=BV13V4y1L7e7&cid=856380434&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+		<div class="iframe-container">
+			&nbsp&nbsp&nbsp&nbsp<iframe src="//player.bilibili.com/player.html?aid=858890564&bvid=BV13V4y1L7e7&cid=856380434&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 			</div>
 
 
-		* 进出巷子
+	* 进出巷子
 
-			和开着门情况下的室内外变化规则类似，但响度和声响的渐变更柔和。
+		和开着门情况下的室内外变化规则类似，但响度和声响的渐变更柔和。
 		
-			<div class="iframe-container">
-							<iframe src="//player.bilibili.com/player.html?aid=561381508&bvid=BV17e4y1q7fc&cid=856379367&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+		<div class="iframe-container">
+			&nbsp&nbsp&nbsp&nbsp<iframe src="//player.bilibili.com/player.html?aid=561381508&bvid=BV17e4y1q7fc&cid=856379367&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 			</div>
 
 ## 功能性
