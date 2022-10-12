@@ -3,7 +3,6 @@ layout: post
 title: "荒野大镖客2 环境声分析"
 subtitle: "Red Dead Redemption 2 - Ambient Sounds Analysis"
 author: "OFF"
-header-style: text
 header-img:   "img/RDR2-bg.jpg"
 header-mask:  0.3
 tags:
