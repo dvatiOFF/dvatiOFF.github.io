@@ -5,7 +5,6 @@ subtitle: "Arena Breakout - Reproduction of audio modules for tactical earphones
 author: "OFF"
 header-img:   "img/Arena-Breakout-bg.jpg"
 header-mask:  0.3
-header-style: text
 tags:
   - Wwise
   - Unity
