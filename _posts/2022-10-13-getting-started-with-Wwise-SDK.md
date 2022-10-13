@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Wwise SDK 入门 - 以几个简单的小工具为例"
+title: "Wwise SDK 入门 - 以几个小工具为例"
 subtitle: "Getting Started With Wwise SDK"
 author: "OFF"
 header-img:   "img/wwise-bg.jpg"
