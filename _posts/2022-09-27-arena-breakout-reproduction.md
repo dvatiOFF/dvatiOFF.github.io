@@ -56,7 +56,7 @@ Wwise官方文档中为总线应用定位的特殊情况举了以下[例子](htt
 
 2. 调用 SDK 函数: 在学习 WAAPI 的过程中，发现 soundengine 部分的 `setScalingFactor` API 的功能正好是控制游戏对象的缩放系数，依此来修改衰减的计算结果。因此在Unity脚本中直接调用对应的函数 `AkSoundEngine.SetScalingFactor()` 可达到控制衰减范围的效果，Unity 脚本实现如下：
 
-```ts
+```c-sharp
 void EnableTacticalHeadset()
 {
     // Double the gameobject's sound pickup range
