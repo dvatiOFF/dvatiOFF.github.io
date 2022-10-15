@@ -24,7 +24,13 @@ tags:
 
 ### 建立通信
 
-有三种协议可与 Wwise 建立通信，包括：WAMP、 HTTP POST 或是在 Wwise 插件中调用 `AK::Wwise::Plugin::Host::WaapiCall()`。其中 WAMP 协议的性能最佳，且支持**远程程序调用**和**发布订阅**功能，因此通常选择这一协议。另外，利用 WAMP 协议调用 API 的可选编程语言有多种，官方推荐的有：C++、C、Python3.6+，下面结合 Python3.6+ 的代码说明建立通信的过程：
+有三种协议可与 Wwise 建立通信，包括：WAMP、 HTTP POST 或是在 Wwise 插件中调用 `AK::Wwise::Plugin::Host::WaapiCall()`。其中 WAMP 协议的性能最佳，且支持**远程程序调用**和**发布订阅**功能，因此通常选择这一协议。
+
+官方文档中对 WAMP 是什么作了补充说明：WAMP 旨在连接分布式应用中的应用组件。WAMP 使用 WebSocket 作为其默认传输方式，允许有序、可靠、双向、信息为导向的通信。 **WAMP 允许客户端使用 JSON 参数来调用函数并获取结构性 JSON 结果**。
+
+目前我们无需深究 WAMP 之下到底是什么，对于这段定义我们只需关注加粗的这部分，之后再回头来看看它到底意味着什么。
+
+另外，利用 WAMP 协议调用 API 的可选编程语言有多种，官方推荐的有：C++、C、Python3.6+，我们先结合一个官方 Python3.6+ 的示例代码说明建立通信的过程：
 
 1. 在当前 Python 环境下安装如下依赖
 
@@ -37,20 +43,39 @@ tags:
 	```py
 	# 导入 WAAPI 相关依赖
 	from waapi import WaapiClient, CannotConnectToWaapiException
+	from pprint import pprint
 	
 	# try except 作为连接失败的异常处理
 	try:
 		# 使用 URL 连接 WAAPI，这里显示写出了默认地址和端口，可以根据需要在 Wwise 中自行修改端口
 		# 此外使用 with as 能保证代码运行至最后自动断开程序和 WAAPI 的连接
-      		with WaapiClient(url='ws://127.0.0.1:8080/waapi') as client:
+		with WaapiClient(url='ws://127.0.0.1:8080/waapi') as client:
       		
-      		（功能代码）
+	      		# 功能代码
+			# == Simple RPC without argument	
+			print("Getting Wwise instance information:")
+			result = client.call("ak.wwise.core.getInfo")
+			pprint(result)
+			    
+			# == RPC with arguments			
+			print("Query the Default Work Unit information:")
+			    
+			object_get_args = {
+			 	"from": {
+			      		"path": ["\\Actor-Mixer Hierarchy\\Default Work Unit"]
+				},
+			     "options": {
+			     		"return": ["id", "name", "type"]
+			 	}
+			}
+			result = client.call("ak.wwise.core.object.get", object_get_args)
+			pprint(result)
       		
 	except CannotConnectToWaapiException:
     		print("Could not connect to Waapi: Is Wwise running and Wwise Authoring API enabled?")
 	```
 
-
+至此，我们已经能够
 
 * 远程程序调用
 
