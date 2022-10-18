@@ -103,16 +103,16 @@ tags:
 > Wwise Authoring API 可以和以下项目集成：
 >
 >* 游戏引擎
-* 对话管理管线
-* 用于声音设计、编辑、对话录音或音乐制作的 DAW
-* 各种各样的脚本
+>* 对话管理管线
+>* 用于声音设计、编辑、对话录音或音乐制作的 DAW
+>* 各种各样的脚本
 >
 > The Wwise Authoring API 可以用于：
 >
 >* 任务自动化，如导入音频文件或创建 Wwise 对象
-* 在移动设备上远程控制 Wwise
-* 实现自定义 Wwise 界面
-* 向 Wwise 添加自定义功能。请参阅 定义命令扩展 。
+>* 在移动设备上远程控制 Wwise
+>* 实现自定义 Wwise 界面
+>* 向 Wwise 添加自定义功能。请参阅 定义命令扩展 。
 >
 > ## 工作原理
 > WAAPI 是一种允许其他进程与 Wwise 设计工具进行通信的 API。WAAPI 支持双向通信，允许进程进行远程程序调用并订阅相关主题，以便在 Wwise 中出现变动时及时获悉。
@@ -120,8 +120,8 @@ tags:
 > WAAPI 允许访问三个不同层次的功能：
 >
 >* Wwise 用户界面：视图、选项、命令等
-* Wwise 设计工具核心：工程和对象、SoundBank、音频文件、走带等
-* Wwise 声音引擎：Game Object、Post Event、RTPC Value 等
+>* Wwise 设计工具核心：工程和对象、SoundBank、音频文件、走带等
+>* Wwise 声音引擎：Game Object、Post Event、RTPC Value 等
 >
 WAAPI 可通过各种编程语言来使用。
 	
