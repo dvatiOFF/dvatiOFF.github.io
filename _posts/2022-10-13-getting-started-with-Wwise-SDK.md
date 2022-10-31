@@ -59,29 +59,6 @@ tags:
 	根据上面代码段中的注释我们得以了解通信是如何被建立的，现在终于来到了最后一部分，我们来看看例子中是如何通过 RPC 调用 API 获得要想的信息，实现各种客制化的功能。
 	
 ### 调用 API
-
-上面代码被省去的部分：
-
-```py
-	# 获取工程信息，无参数调用
-	print("Getting Wwise instance information:")
-	result = client.call("ak.wwise.core.getInfo")
-	pprint(result)
-		    
-	# 查询指定对象的信息	，JSON 参数调用	
-	print("Query the Default Work Unit information:")
-	object_get_args = {
-	# JSON 参数段
-		 "from": {
-	      		"path": ["\\Actor-Mixer Hierarchy\\Default Work Unit"]
-		},
-	     "options": {
-	     		"return": ["id", "name", "type"]
-	 	}
-	}
-	result = client.call("ak.wwise.core.object.get", object_get_args)
-	pprint(result)
-```
 	
 程序运行结果：
 		
@@ -96,8 +73,33 @@ tags:
 * 发布订阅 - client.subscribe()
 
 	允许在 Wwise 设计工具中出现变动时接收通知，我们可以在程序中调用官方 reference 给出的 Topics 中的所有 API。调用这些 API 后我们可以订阅 Wwise 中对应的动作，比如订阅某个对象的名称，当它的名称修改后就能得到返回的具体信息。
+
+再次回到官方示例中使用到的两个 API，它们都属于 Fuctions 类，下面是之前代码被省去的部分：
+
+```py
+	# 获取工程信息，无参数调用
+	print("Getting Wwise instance information:")
+	result = client.call("ak.wwise.core.getInfo")
+	pprint(result)
+		    
+	# 查询指定对象的信息	，JSON 参数调用	
+	print("Query the Default Work Unit information:")
+	# JSON 参数段
+	object_get_args = {
+		"from": {
+	      		"path": ["\\Actor-Mixer Hierarchy\\Default Work Unit"]
+		},
+	     "options": {
+	     		"return": ["id", "name", "type"]
+	 	}
+	}
+	result = client.call("ak.wwise.core.object.get", object_get_args)
+	pprint(result)
+```
 	
-可以看到代码中我们通过`ak.wwise.core.getInfo`获取了当前 Wwise 工程的全局信息，通过`ak.wwise.core.object.get`查询到了某个指定对象的基本信息，至此我们终于到达了 Wwise SDK 的核心部分 —— [WAAPI](https://www.audiokinetic.com/zh/library/edge/?source=SDK&id=waapi.html)。
+可以看到代码中我们通过`ak.wwise.core.getInfo`获取了当前 Wwise 工程的全局信息；通过`ak.wwise.core.object.get`查询到了一个指定路径下默认工作单元的基本信息（通过这个 API 可以获取 Wwise 内[任意对象](https://www.audiokinetic.com/zh/library/edge/?source=SDK&id=wobjects_index.html)的信息），这个 API 需要在调用时提供对应 JSON 格式的参数。这里参数中的 "path" 属于 Augments 参数，规定了调用此 API 需要提供的参数；"return" 属于 Options 参数，手动规定了调用后返回结果的具体内容，具体的信息我们可以在官方文档[相关页](https://www.audiokinetic.com/library/edge/?source=SDK&id=ak_wwise_core_object_get.html)对应的语法（Schema）中查看。
+
+至此我们终于到达了 Wwise SDK 的核心部分 —— [WAAPI](https://www.audiokinetic.com/zh/library/edge/?source=SDK&id=waapi.html)。
 
 > ## 用例示例
 > Wwise Authoring API 可以和以下项目集成：
@@ -127,11 +129,10 @@ WAAPI 可通过各种编程语言来使用。
 	
 Wwise 的官方文档强大且全面，但 WAAPI 的部分是按字典序分类排列的，且不存在关联性缺乏整理，对于初学者非常不友好。受到溪夜老师的文章[人人都能用 WAAPI（一）概述](https://xiye.art/2020/09/01/WAAPI%20一文通（一）)启发，我在过文档学习各 API 功能的过程中尝试去使用思维导图对它们进行整理分类。
 
-![]()
+![](/img/WWAPI-MindMap.png)
 
-如上图所示，按照远程过程调用和发布订阅的差异，官方文档将 WAAPI 分为 Fuctions 和 Topics 两大类，再按照类的命名我们还可以对所有的 API 进一步细分。图中的各个绿色虚线框是针对每个 API 的实际功能进行的更细致的分类。除了上述的分类方法，我们还可以按有无输入参数，有无返回值来分类。应用范围较广的 API 都有着对应的官方示例，利用好这些示例可以帮助我们快速熟悉这些 API。对于没有示例的 API，除了查看官方文档中对其功能简单的描述外，还要仔细查看它的参数以及返回值，自行判断它的应用场景。
+如上图所示，按照远程过程调用和发布订阅的差异，官方文档将 WAAPI 分为 Fuctions 和 Topics 两大类，再按照类的命名我们还可以对所有的 API 进一步细分。图中的各个绿色虚线框是针对每个 API 的实际功能进行的更细致的分类。除了上述的分类方法，我们还可以按有无输入参数，有无返回值来分类。应用范围较广的 API 都有着对应的官方示例，利用好这些示例可以帮助我们快速熟悉这些 API。对于没有示例的 API，除了查看官方文档中对其功能简单的描述外，还要仔细查看它的参数以及返回值，以便判断它可能的应用场景。
 
-再次回到官方示例中使用到的两个 API，
 
 
 
