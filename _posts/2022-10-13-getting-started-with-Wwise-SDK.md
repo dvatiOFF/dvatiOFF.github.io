@@ -277,8 +277,33 @@ def create_for_all_event(p_paths, object_ids):
 >	* Windows："%WWISEROOT%\\Authoring\\Data\\Add-ons\\Commands"
 >	* macOS："/Library/Application Support/Audiokinetic/Wwise <version>/Authoring/Data/Add-ons/Commands"
 >* 工程文件夹中：Add-ons\Commands 下
->* 使用 `ak.wwise.ui.commands.register`
+>* 使用`ak.wwise.ui.commands.register`
 >
+
+针对音频工作者最常使用的 Windows 和 Mac 系统，可以使用 pyinstaller、py2app 之类的库将程序打包为对应平台的工具。根据使用场景，我们可以选择将扩展命令的 JSON 文件放至不同的层级下，考虑到当前工具的泛用性，我们可以选择放至其安装文件夹或用户数据目录中，对于一些针对性强的项目级工具可以放至工程文件夹中。另外我们还可以编写脚本实现将扩展命令和工具自动放至所需的目录的操作。
+
+```
+{
+    "version":2,
+    "commands":[
+        {
+            "id":"off.create_soundbanks_for_selected_events",
+            "displayName":"Create SoundBanks for Selected Events",
+            "program":"/tool1.app",
+            "args":"",
+            "startMode":"MultipleSelectionSingleProcessSpaceSeparated",
+            "cwd":"${CurrentCommandDirectory}",
+            "contextMenu": {
+                "basePath":"Extra tools",
+                "enabledFor":"Event, WorkUnit, Folder"
+            }
+        }
+    ]
+}
+```
+
+上面是我们将刚写好的生成 SoundBank 工具嵌入 Wwise 上下文菜单的 JSON 扩展命令代码，官方文档中对于扩展命令的定义字段抖做出了较详细的描述。上面的命令中 cwd 字段对应了执行程序当前的工作目录，我们直接使用`${CurrentCommandDirectory}`这一官方定义的通用目录（当前扩展命令所在的路径）； program 字段对应了需要运行的执行程序的路径，我们将其放在了同一路径下所以这里直接填写对应的文件名；args 字段是需要给执行程序传入的参数，这里为空；startMode 字段指定了在 Wwise UI 中执行多选时如何扩展参数字段中的变量，由于我们的工具存在选中多个对象的情况，所以填入值为 MultipleSelectionSingleProcessSpaceSeparated；因为可能存在多个扩展工具，我们在 contextMenu 字段中的 basePath 中填入所需的值作为一级菜单名，在 enabledFor 中限定允许激活此命令的对象，即只有 Event、WorkUnit 和 Folder对象的右键菜单才能使用此工具。
+
 
 
 
