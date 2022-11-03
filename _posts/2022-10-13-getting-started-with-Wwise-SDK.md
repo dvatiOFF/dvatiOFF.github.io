@@ -135,7 +135,6 @@ Wwise 的官方文档强大且全面，但 WAAPI 的部分是按字典序分类�
 在实际项目中，经常存在需要为大量 Event 创建不同 SoundBank 的情况，我们可以通过调用 WAAPI 实现客制化工具来优化这一流程。上图是这个工具的界面，程序会自动识别当前 Wwise 工程中用户在 Event 选项卡下选中的对象，并根据对象的路径以及单选按钮中的限制条件为这些对象创建对应的 SoundBank。下面将这个工具分为：选中对象的获取和判断，不同生成条件下的路径判断和 SoundBank 生成三两部分，结合代码展开讲解。
 
 ### 选中对象的获取和判断
-
 首先明确我们所需要的 API，这里显然是需要获取 UI 层面的信息，我们定位到文档的 ak.wwise.ui 部分并选择 `ak.wwise.ui.getSelectedObjects `。
 
 ```py
@@ -180,8 +179,106 @@ for select in result_select:
 
 通过上面的代码，我们成功获取了 Wwise 工程中选中对象的所需信息，判断了合法性且对路径信息进行了处理以便后续的操作。要注意的是我们通过设置 options 参数以筛选获得必要的四种信息。另外，我们在初次获取信息并创建好 GUI window 显示后，可以把上面的代码放入 while 循环中，通过`window.read()`和`window['-TABLE-'].update(values=data)`来保证 table 中选中信息的实时刷新。
 
-### 不同生成条件下的路径判断和 SoundBank 生成
+### 生成条件下的路径判断和 SoundBank 生成
+下面以为所有选中对象创建一个 SoundBank 的代码为例，另一选项需要的是更多对不同路径逻辑上的判断，在 WAAPI 的使用上是基本一致的。
 
+```py
+# 为选中的所有对象创建一个SoundBank，传入的参数是每个对象的父路径以及 id
+def create_for_all_event(p_paths, object_ids):
+    path_split = p_paths[0].replace('\\', "", 1)
+    path_split = path_split.split('\\')
+    path_split[0] = 'Events'
+
+    # 如果所有对象在同一路径下
+    if same_path and len(path_split) > 1:
+        cur_event_path = '\\' + path_split[0]
+        
+        # 从根部开始逐一判断每一级父路径的类型并在SoundBank下创建
+        for cur in path_split[1:]:
+            cur_soundbank_path = '\\SoundBanks' + cur_event_path[7:]
+            cur_event_path = cur_event_path + '\\' + cur
+            # 查询当前一级对象的类型
+            args_get_cur_type = {
+                "from": {
+                    "path": [
+                        cur_event_path
+                    ]
+                }
+            }
+            opts_get_cur_type = {
+                "return": [
+                    "type"
+                ]
+            }
+            cur_type = client.call("ak.wwise.core.object.get", args_get_cur_type, options=opts_get_cur_type)['return'][0].get('type')
+            # 根据查询到的类型创建对应对象
+            args_create_path = {
+                "parent": cur_soundbank_path,
+                "type": cur_type,
+                "name": cur,
+                "onNameConflict": "merge"
+            }
+            client.call("ak.wwise.core.object.create", args_create_path)
+        bank_path = '\\SoundBanks' + cur_event_path[7:]
+    # 不在同一路径下时以Default Work Unit为默认路径
+    else:
+        bank_path = "\\SoundBanks\\Default Work Unit"
+
+    # 创建Bank
+    args_create_bank = {
+        "parent": bank_path,
+        "type": "SoundBank",
+        "name": "ALL_IN_ONE",
+        "onNameConflict": "rename"
+    }
+    result_bank_id = client.call("ak.wwise.core.object.create", args_create_bank).get('id')
+    # 将选中的所有Event添加至Bank
+    for object_id in object_ids:
+        args_bank_add = {
+            "soundbank": result_bank_id,
+            "operation": "add",
+            "inclusions": [
+                {
+                    "object": object_id,
+                    "filter": [
+                        "events"
+                    ]
+                }
+            ]
+        }
+        client.call("ak.wwise.core.soundbank.setInclusions", args_bank_add)
+```
+
+上面的代码保存了 Events 选项卡下各对象的父路径，从根部开始依次遍历判断类型并使用`ak.wwise.core.object.create` API 在 SoundBanks 选项卡下生成对应的对象，如此成功复制了选中对象的路径层级。再在这个路径下使用相同的 API 生成 Bank，由于此时生成的 Bank 不包含任何 Inclusions，我们还需要调用`ak.wwise.core.soundbank.setInclusions`将 选中的所有 Events 添加进去。
+
+### 使用命令扩展将程序嵌入 Wwise 菜单
+
+![](/img/Wwise-command-addons.png)
+
+对于使用频率比较高的工具，我们可以使用命令扩展将其嵌入 Wwise 客户端。如上图我们将这个工具嵌入至了 Wwise Events 选项卡的右键菜单中，使用工具时更方便快捷。
+
+> ## 命令扩展概述
+> 命令扩展方便为 Wwise 设计工具定义新的命令。每个命令都与 Wwise 触发的外部程序关联。所执行的程序可接收来自当前所选对象的各种预定义参数。
+> 
+> 可通过不同方式触发扩展命令：
+> 
+>* 键盘快捷方式
+>* 上下文菜单
+>* 主菜单
+>* 控制器
+>* WAAPI（使用`ak.wwise.ui.commands.execute`）
+>
+> 可在多个级别定义扩展命令：
+>
+>* 用户数据目录中：
+>	* Windows："%APPDATA%\\Audiokinetic\\Wwise\\Add-ons\\Commands"
+>	* macOS："$HOME/Library/Application Support/Audiokinetic/Wwise/Add-ons/Commands"
+>* 安装文件夹中：
+>	* Windows："%WWISEROOT%\\Authoring\\Data\\Add-ons\\Commands"
+>	* macOS："/Library/Application Support/Audiokinetic/Wwise <version>/Authoring/Data/Add-ons/Commands"
+>* 工程文件夹中：Add-ons\Commands 下
+>* 使用 `ak.wwise.ui.commands.register`
+>
 
 
 
