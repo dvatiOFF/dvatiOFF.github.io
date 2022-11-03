@@ -73,24 +73,24 @@ tags:
 再次回到官方示例中使用到的两个 API，它们都属于 Fuctions 类，下面是之前代码被省去的部分：
 
 ```py
-	# 获取工程信息，无参数调用
-	print("Getting Wwise instance information:")
-	result = client.call("ak.wwise.core.getInfo")
-	pprint(result)
-		    
-	# 查询指定对象的信息	，JSON 参数调用	
-	print("Query the Default Work Unit information:")
-	# JSON 参数段
-	object_get_args = {
-		"from": {
-	      		"path": ["\\Actor-Mixer Hierarchy\\Default Work Unit"]
-		},
-	     "options": {
-	     		"return": ["id", "name", "type"]
-	 	}
-	}
-	result = client.call("ak.wwise.core.object.get", object_get_args)
-	pprint(result)
+# 获取工程信息，无参数调用
+print("Getting Wwise instance information:")
+result = client.call("ak.wwise.core.getInfo")
+pprint(result)
+	    
+# 查询指定对象的信息	，JSON 参数调用	
+print("Query the Default Work Unit information:")
+# JSON 参数段
+object_get_args = {
+	"from": {
+      		"path": ["\\Actor-Mixer Hierarchy\\Default Work Unit"]
+	},
+     "options": {
+     		"return": ["id", "name", "type"]
+ 	}
+}
+result = client.call("ak.wwise.core.object.get", object_get_args)
+pprint(result)
 ```
 	
 可以看到代码中我们通过`ak.wwise.core.getInfo`获取了当前 Wwise 工程的全局信息；通过`ak.wwise.core.object.get`查询到了一个指定路径下默认工作单元的基本信息（通过这个 API 可以获取 Wwise 内[任意对象](https://www.audiokinetic.com/zh/library/edge/?source=SDK&id=wobjects_index.html)的信息），这个 API 需要在调用时提供对应 JSON 格式的参数。这里参数中的 "path" 属于 Augments 参数，规定了调用此 API 需要提供的参数；"return" 属于 Options 参数，手动规定了调用后返回结果的具体内容，具体的信息我们可以在官方文档[相关页](https://www.audiokinetic.com/library/edge/?source=SDK&id=ak_wwise_core_object_get.html)对应的语法（Schema）中查看。
@@ -132,8 +132,55 @@ Wwise 的官方文档强大且全面，但 WAAPI 的部分是按字典序分类�
 ## 为选中的对象创建 SoundBank
 ![](/img/Wwise-tool-create-soundbank.png)
 
-在实际项目中，经常存在需要为大量 Event 创建不同 SoundBank 的情况，我们可以通过调用 WAAPI 实现客制化工具来优化这一流程，大大节省冗余繁琐的操作所花费的时间。上图是这个工具的界面，程序会自动识别当前 Wwise 工程中用户在 Event 选项卡下选中的对象，并根据对象的路径以及单选按钮中的限制条件为这些对象创建对应的 SoundBank。
+在实际项目中，经常存在需要为大量 Event 创建不同 SoundBank 的情况，我们可以通过调用 WAAPI 实现客制化工具来优化这一流程。上图是这个工具的界面，程序会自动识别当前 Wwise 工程中用户在 Event 选项卡下选中的对象，并根据对象的路径以及单选按钮中的限制条件为这些对象创建对应的 SoundBank。下面将这个工具分为：选中对象的获取和判断，不同生成条件下的路径判断和 SoundBank 生成三两部分，结合代码展开讲解。
 
+### 选中对象的获取和判断
+
+首先明确我们所需要的 API，这里显然是需要获取 UI 层面的信息，我们定位到文档的 ak.wwise.ui 部分并选择 `ak.wwise.ui.getSelectedObjects `。
+
+```py
+# 获取当前选中对象的以下四种信息
+opts_select = {
+    "return": [
+        "id", "path", "name", "type"
+    ]
+}
+
+ids = []  # 所有选中对象的id
+# 三种路径主要是为了处理选中对象后在SoundBanks下生成对应路径的问题
+ori_paths = []  # 所有选中对象的工程路径
+paths = []  # 所有选中对象应在SoundBanks下的路径
+parent_paths = []  # 所有选中对象应在SoundBanks下的父路径
+
+names = []  # 所有选中对象的名称
+types = []  # 所有选中对象的类型
+wrong_select = False # 用于判断选中对象的合法性
+same_path = False # 用于判断所有选中对象是否处于同一父路径下
+# 调用 API 获取所需对象
+result_select = client.call("ak.wwise.ui.getSelectedObjects", options=opts_select)['objects']
+
+for select in result_select:
+    # 判断选中对象是否合法，即是否在Event路径下
+    if select.get('path')[:6] != '\\Event':
+        wrong_select = True
+        break
+    ids.append(select.get('id'))
+    names.append(select.get('name'))
+    ori_paths.append(select.get('path'))
+    types.append(select.get('type'))
+    # 修改选中对象的路径为\SoundBanks开头
+    path = '\SoundBanks' + select.get('path')[7:] 
+    paths.append(path)
+    # 获取父级路径
+    name = select.get('name')
+    name = '\\' + name
+    parent_path = path.replace(name, "")
+    parent_paths.append(parent_path)
+```
+
+通过上面的代码，我们成功获取了 Wwise 工程中选中对象的所需信息，判断了合法性且对路径信息进行了处理以便后续的操作。要注意的是我们通过设置 options 参数以筛选获得必要的四种信息。另外，我们在初次获取信息并创建好 GUI window 显示后，可以把上面的代码放入 while 循环中，通过`window.read()`和`window['-TABLE-'].update(values=data)`来保证 table 中选中信息的实时刷新。
+
+### 不同生成条件下的路径判断和 SoundBank 生成
 
 
 
