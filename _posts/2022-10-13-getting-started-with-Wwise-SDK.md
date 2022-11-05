@@ -308,13 +308,97 @@ def create_for_all_event(p_paths, object_ids):
 
 ## Wwise 工程中一些冗余资源的删除
 
-通常一个进行的项目和 Wwise 工程是一对一的关系，随着项目的推进，我们需要定期清理一些 Wwise 工程中的冗余资源。下面从另一个角度聊聊 Wwise 底层相关的知识，涉及的两个工具只用到了极少的 WAAPI，关键的信息是直接从工程路径的相关文件中读取并处理的。
+通常一个进行的项目和 Wwise 工程是一对一的关系，随着项目的推进，我们需要定期清理一些 Wwise 工程中的冗余资源。下面从另一个角度聊聊 Wwise 底层相关的知识，涉及的两个工具只用到了极少的 WAAPI，关键的信息是直接从工程路径的相关的文件中或是通过某些文件夹下的文件本身，读取并处理得到的。
 
-## 删除冗余的 wem 文件
-	
+### 删除冗余的 wem 文件
+在生成 SoundBank 后，Wwise 工程路径下会出现一个名为 GeneratedSoundBanks 的文件夹，里面有生成后各平台的 Bank 文件、wem（Wwise Encoded Media） 文件以及 SoundBanksInfo.xml 文件，这个 xml 文件中保存了所有与 SoundBank 相关的信息。因此我们可以通过相关库读取 xml 文件并获得所有的已使用的 wem 文件的信息。由于存在多次生成 SoundBank 的情况，我们想要删除 GeneratedSoundBanks 文件夹中没有被使用到的冗余 wem 文件。
+
 ![](/img/Wwise-delete-wem-1.png)
-	
+
+由于存在工程文件夹位置变更的情况，如上图所示，工具首先需要用户选择当前项目工程/平台对应的 xml 文件。
+
+```xml
+<SoundBanksInfo Platform="Mac" BasePlatform="Mac" SchemaVersion="12" SoundbankVersion="140">
+	<RootPaths>
+		<ProjectRoot>/Users/dotm/Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/z:/Applications/Audiokinetic/Wwise 2021.1.10.7883/SampleProject/</ProjectRoot>
+		<SourceFilesRoot>/Users/dotm/Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/z:/Applications/Audiokinetic/Wwise 2021.1.10.7883/SampleProject/.cache/Windows/</SourceFilesRoot>
+		<SoundBanksRoot>/Users/dotm/Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/z:/Applications/Audiokinetic/Wwise 2021.1.10.7883/SampleProject/GeneratedSoundBanks/Windows/</SoundBanksRoot>
+		<ExternalSourcesInputFile></ExternalSourcesInputFile>
+		<ExternalSourcesOutputRoot>/Users/dotm/Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/z:/Applications/Audiokinetic/Wwise 2021.1.10.7883/SampleProject/GeneratedSoundBanks/Windows</ExternalSourcesOutputRoot>
+	</RootPaths>
+	<StreamedFiles>
+		<File Id="1001903680" Language="SFX">
+			<ShortName>NYC Ambience\OneShot_ThunderBkgrnd_02.wav</ShortName>
+			<Path>SFX/NYC Ambience/OneShot_ThunderBkgrnd_02_CC87FBFB.wem</Path>
+		</File>
+	</StreamedFiles>
+	<SoundBanks>
+		<SoundBank Id="85412153" Language="SFX" Hash="2355214421">
+			<ObjectPath>\SoundBanks\Ambience\Ambience</ObjectPath>
+			<ShortName>Ambience</ShortName>
+			<Path>Ambience.bnk</Path>
+			<IncludedEvents>
+				<Event Id="3339089830" Name="Play_24h_New_York_City_Ambience" ObjectPath="\Events\Ambience\Play_24h_New_York_City_Ambience">
+					<ReferencedStreamedFiles...>
+					<IncludedMemoryFiles...>
+				</Event>
+			</IncludedEvents>
+		</SoundBank>
+	</SoundBanks>
+</SoundBanksInfo>
+```
+
+结合上方的例子，我们看看在 SoundBanksInfo.xml 文件中有哪些关键标签内的信息是我们需要的。当我们在 Wwise 中对较长的背景音乐等音频素材启用 stream 选项即流媒体播放后，在生成 SoundBank 时就会将这些媒体文件存储到对应的 wem 文件中以供在游戏当中进行流播放，<StreamedFIles> 标签下保存的就是这些流媒体文件的相关信息。<SoundBanks> 标签下有所有生成的 SoundBanks 的相关信息，我们需要读取其中每个 <Event> 下 <ReferencedStreamedFiles> 以及 <IncludedMemoryFiles> 两个字标签内的信息，它们列出了流播放和直接播放所需的所有 wem 文件信息。<RootPaths> 标签中给出了一些根路径的信息，根据需要我们找到 <SoundBanksRoot> 下保存的路径，即当前 xml 文件所在的 GeneratedSoundBanks 文件夹的路径。
+
+```py
+# 搜索xml中未使用的音频文件（对比<StreamedFiles>标签下的文件和<SoundBanksRoot>指向路径下的文件）
+def search_unused_files(path):
+    soundbank_data = parse(path)
+    root_node = soundbank_data.documentElement
+    root_path = root_node.getElementsByTagName('SoundBanksRoot')[0].childNodes[0].data
+    file_list_used = []
+    file_list_unused = []
+    file_abspath_list_unused = []
+
+    nodes = root_node.getElementsByTagName('SoundBanks')
+    for node in nodes:
+        events = node.getElementsByTagName('IncludedEvents')
+        for event in events:
+            streamedFiles = event.getElementsByTagName('ReferencedStreamedFiles')
+            for streamedFile in streamedFiles:
+                files = streamedFile.getElementsByTagName('File')
+                for file in files:
+                    file_id = str(file.getAttribute('Id'))
+                    # 不同bank可能引用同一wem，去重复
+                    if file_list_used.count(file_id) == 0:
+                        file_list_used.append(file_id)
+
+            memoryFiles = event.getElementsByTagName('IncludedMemoryFiles')
+            for memoryFile in memoryFiles:
+                files = memoryFile.getElementsByTagName('File')
+                for file in files:
+                    file_id = str(file.getAttribute('Id'))
+                    # 不同bank可能引用同一wem，去重复
+                    if file_list_used.count(file_id) == 0:
+                        file_list_used.append(file_id)
+
+    # 读取<SoundBanksRoot>标签指向的路径下所有wem文件的路径
+    for root, dirs, files in os.walk(root_path):
+        for file in files:
+            base_name, ext = os.path.splitext(file)
+            if ext == ".wem":
+                if file_list_used.count(base_name) == 0:
+                    file_list_unused.append(file)
+                    file_abspath_list_unused.append(os.path.join(root, file))
+
+    return file_list_unused, file_abspath_list_unused
+```
+
+对比 xml 文件中列出的所有引用到的 wem 文件和 GeneratedSoundBanks 文件夹下实际存在的 wem 文件即可得到未被使用的冗余文件列表。
+
 ![](/img/Wwise-delete-wem-2.png)
+
+### 删除冗余的 wav 文件
 
 
 # 文章正在施工中！！
