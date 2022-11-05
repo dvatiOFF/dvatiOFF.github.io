@@ -302,9 +302,17 @@ def create_for_all_event(p_paths, object_ids):
 }
 ```
 
-上面是我们将刚写好的生成 SoundBank 工具嵌入 Wwise 上下文菜单的 JSON 扩展命令代码，官方文档中对于扩展命令的定义字段抖做出了较详细的描述。上面的命令中 cwd 字段对应了执行程序当前的工作目录，我们直接使用`${CurrentCommandDirectory}`这一官方定义的通用目录（当前扩展命令所在的路径）； program 字段对应了需要运行的执行程序的路径，我们将其放在了同一路径下所以这里直接填写对应的文件名；args 字段是需要给执行程序传入的参数，这里为空；startMode 字段指定了在 Wwise UI 中执行多选时如何扩展参数字段中的变量，由于我们的工具存在选中多个对象的情况，所以填入值为 MultipleSelectionSingleProcessSpaceSeparated；因为可能存在多个扩展工具，我们在 contextMenu 字段中的 basePath 中填入所需的值作为一级菜单名，在 enabledFor 中限定允许激活此命令的对象，即只有 Event、WorkUnit 和 Folder对象的右键菜单才能使用此工具。
+上面是我们将刚写好的生成 SoundBank 工具嵌入 Wwise 上下文菜单的 JSON 扩展命令代码，官方文档中对于扩展命令的定义字段抖做出了较详细的描述。
 
+上面的命令中 `cwd` 字段对应了执行程序当前的工作目录，我们直接使用${CurrentCommandDirectory}这一官方定义的通用目录（当前扩展命令所在的路径）； `program` 字段对应了需要运行的执行程序的路径，我们将其放在了同一路径下所以这里直接填写对应的文件名；`args` 字段是需要给执行程序传入的参数，这里为空；`startMode` 字段指定了在 Wwise UI 中执行多选时如何扩展参数字段中的变量，由于我们的工具存在选中多个对象的情况，所以填入值为 MultipleSelectionSingleProcessSpaceSeparated；因为可能存在多个扩展工具，我们在 `contextMenu` 字段中的 basePath 中填入所需的值作为一级菜单名，在 enabledFor 中限定允许激活此命令的对象，即只有 Event、WorkUnit 和 Folder对象的右键菜单才能使用此工具。
 
+## Wwise 工程中一些冗余资源的删除
+
+通常一个进行的项目和 Wwise 工程是一对一的关系，随着项目的推进，我们需要定期清理一些 Wwise 工程中的冗余资源。下面从另一个角度聊聊 Wwise 底层相关的知识，涉及的两个工具只用到了极少的 WAAPI，关键的信息是直接从工程路径的相关文件中读取并处理的。
+
+## 删除冗余的 wem 文件
+![](/img/Wwise-delete-wem-1.png)
+![](/img/Wwise-delete-wem-2.png)
 
 
 # 文章正在施工中！！
