@@ -311,7 +311,9 @@ def create_for_all_event(p_paths, object_ids):
 通常一个进行的项目和 Wwise 工程是一对一的关系，随着项目的推进，我们需要定期清理一些 Wwise 工程中的冗余资源。下面从另一个角度聊聊 Wwise 底层相关的知识，涉及的两个工具只用到了极少的 WAAPI，关键的信息是直接从工程路径的相关文件中读取并处理的。
 
 ## 删除冗余的 wem 文件
+	
 ![](/img/Wwise-delete-wem-1.png)
+	
 ![](/img/Wwise-delete-wem-2.png)
 
 
