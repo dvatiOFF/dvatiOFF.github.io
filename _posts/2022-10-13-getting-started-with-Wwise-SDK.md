@@ -304,13 +304,15 @@ def create_for_all_event(p_paths, object_ids):
 
 上面是我们将刚写好的生成 SoundBank 工具嵌入 Wwise 上下文菜单的 JSON 扩展命令代码，官方文档中对于扩展命令的定义字段抖做出了较详细的描述。
 
-上面的命令中 `cwd` 字段对应了执行程序当前的工作目录，我们直接使用${CurrentCommandDirectory}这一官方定义的通用目录（当前扩展命令所在的路径）； `program` 字段对应了需要运行的执行程序的路径，我们将其放在了同一路径下所以这里直接填写对应的文件名；`args` 字段是需要给执行程序传入的参数，这里为空；`startMode` 字段指定了在 Wwise UI 中执行多选时如何扩展参数字段中的变量，由于我们的工具存在选中多个对象的情况，所以填入值为 MultipleSelectionSingleProcessSpaceSeparated；因为可能存在多个扩展工具，我们在 `contextMenu` 字段中的 basePath 中填入所需的值作为一级菜单名，在 enabledFor 中限定允许激活此命令的对象，即只有 Event、WorkUnit 和 Folder对象的右键菜单才能使用此工具。
+上面的命令中 `cwd` 字段对应了执行程序当前的工作目录，我们直接使用`${CurrentCommandDirectory}`这一官方定义的通用目录（当前扩展命令所在的路径）； `program` 字段对应了需要运行的执行程序的路径，我们将其放在了同一路径下所以这里直接填写对应的文件名；`args` 字段是需要给执行程序传入的参数，这里为空；`startMode` 字段指定了在 Wwise UI 中执行多选时如何扩展参数字段中的变量，由于我们的工具存在选中多个对象的情况，所以填入值为 MultipleSelectionSingleProcessSpaceSeparated；因为可能存在多个扩展工具，我们在 `contextMenu` 字段中的 basePath 中填入所需的值作为一级菜单名，在 enabledFor 中限定允许激活此命令的对象，即只有 Event、WorkUnit 和 Folder对象的右键菜单才能使用此工具。
 
-## Wwise 工程中一些冗余资源的删除
 
-通常一个进行的项目和 Wwise 工程是一对一的关系，随着项目的推进，我们需要定期清理一些 Wwise 工程中的冗余资源。下面从另一个角度聊聊 Wwise 底层相关的知识，涉及的两个工具只用到了极少的 WAAPI，关键的信息是直接从工程路径的相关的文件中或是通过某些文件夹下的文件本身，读取并处理得到的。
+## 删除冗余的 wem 文件
 
-### 删除冗余的 wem 文件
+通常一个进行的项目和 Wwise 工程是一对一的关系，随着项目的推进，我们需要定期清理一些 Wwise 工程中的冗余资源。下面从另一个角度聊聊 Wwise 底层相关的知识，涉及的工具只用到了极少的 WAAPI，关键的信息是直接从工程路径的相关的文件中或是通过某些文件夹下的文件本身，读取并处理得到的。
+
+### 工程路径和 SoundBanksInfo.xml 文件
+
 在生成 SoundBank 后，Wwise 工程路径下会出现一个名为 GeneratedSoundBanks 的文件夹，里面有生成后各平台的 Bank 文件、wem（Wwise Encoded Media） 文件以及 SoundBanksInfo.xml 文件，这个 xml 文件中保存了所有与 SoundBank 相关的信息。因此我们可以通过相关库读取 xml 文件并获得所有的已使用的 wem 文件的信息。由于存在多次生成 SoundBank 的情况，我们想要删除 GeneratedSoundBanks 文件夹中没有被使用到的冗余 wem 文件。
 
 ![](/img/Wwise-delete-wem-1.png)
@@ -349,6 +351,8 @@ def create_for_all_event(p_paths, object_ids):
 ```
 
 结合上方的例子，我们看看在 SoundBanksInfo.xml 文件中有哪些关键标签内的信息是我们需要的。当我们在 Wwise 中对较长的背景音乐等音频素材启用 stream 选项即流媒体播放后，在生成 SoundBank 时就会将这些媒体文件存储到对应的 wem 文件中以供在游戏当中进行流播放，<StreamedFIles> 标签下保存的就是这些流媒体文件的相关信息。<SoundBanks> 标签下有所有生成的 SoundBanks 的相关信息，我们需要读取其中每个 <Event> 下 <ReferencedStreamedFiles> 以及 <IncludedMemoryFiles> 两个字标签内的信息，它们列出了流播放和直接播放所需的所有 wem 文件信息。<RootPaths> 标签中给出了一些根路径的信息，根据需要我们找到 <SoundBanksRoot> 下保存的路径，即当前 xml 文件所在的 GeneratedSoundBanks 文件夹的路径。
+
+### 对比使用情况
 
 ```py
 # 搜索xml中未使用的音频文件（对比<StreamedFiles>标签下的文件和<SoundBanksRoot>指向路径下的文件）
@@ -394,17 +398,118 @@ def search_unused_files(path):
     return file_list_unused, file_abspath_list_unused
 ```
 
-对比 xml 文件中列出的所有引用到的 wem 文件和 GeneratedSoundBanks 文件夹下实际存在的 wem 文件即可得到未被使用的冗余文件列表。
+对比 xml 文件中列出的所有引用到的 wem 文件和 GeneratedSoundBanks 文件夹下实际存在的 wem 文件即可得到未被使用的冗余文件列表，这里会使用到 xml.dom.minidom 这个库来处理 xml 文件。
 
 ![](/img/Wwise-delete-wem-2.png)
 
-### 删除冗余的 wav 文件
+## 删除冗余的音频文件
 
 ![](/img/Wwise-file-manager.png)
 
 在 Wwise 客户端中打开 File Manager（Shift + F1），在 Source Files 选项卡中会显示各资源的使用情况，可以编写工具实现对 Usage 使用情况为 Not In Use 的冗余 SFX 资源的一键删除。
 
-![](/img/Wwise-delete-wav.png)
+### 提高工具对 Wwise 版本的兼容性
+
+随着 Wwise 版本升级至 2021，出现了 WAQL（Wwise Authoring Query Language） 优化了在 Wwise 客户端内或是底层代码层面对各种对象的搜索查询。但时常会出现项目由于稳定性等考虑，依然不得不维持在较早的版本，为了提高工具在不同版本下的兼容性，我们需要考虑新旧版本的差异，很多 WAAPI 的参数名都在新版本做了更新，比如：`ak.wwise.core.object.get `这一 API 的 options 的 return 返回值在 21 版本就新增了originalWavFilePath 这一项，之前为 sound:originalWavFilePath。
+
+> Wwise Authoring Query Language (WAQL) 方便查询 Wwise 工程及其对象。藉此，用户可枚举各种 Wwise 对象（如 Sound、Container、Bus、Event 和 SoundBank），并按照属性（如名称、注释、ID、音量、音高和输出总线）加以筛选。另外，还可依据特定对象引用（如 Event 目标和输出总线）实施查询。
+>
+>WAQL 可用于以下场合：
+>
+>* Wwise 工具栏搜索
+>* List View 搜索
+>* Schematic View 搜索
+>* WAAPI（使用 ak.wwise.core.object.get 函数）
+>
+
+以下工具在启动时会先判断当前 Wwise 客户端的版本，并根据版本自动调用不同的方法。
+
+```py
+# 获取当前Wwise版本
+info_result = client.call("ak.wwise.core.getInfo").get('version')['displayName']
+wwise_version = int(info_result.replace('v', '')[:4])
+
+···
+
+# 根据Wwise版本选择对应方法
+if wwise_version < 2021:
+    wwu()
+else:
+    waql()
+```
+
+### 搜索已使用的音频资源
+
+```py
+# 获取当前工程路径
+args_project = {
+    "from": {
+        "ofType": [
+            "Project"
+        ]
+    }
+}
+opts_project = {
+    "return": [
+        "name",
+        "filePath"
+    ]
+}
+result = client.call("ak.wwise.core.object.get", args_project, options=opts_project)['return'][0]
+name = '\\' + result.get('name') + '.wproj'
+file_path = result.get('filePath')
+project_path = file_path.replace(name, '')  # 工程根路径
+originals_path = project_path + '\\Originals'  # 音频源文件路径
+
+# 使用wwu方法（针对低于Wwise 2021的版本）
+def wwu():
+    wwu_path1 = project_path + '\\Actor-Mixer Hierarchy'
+    wwu_path2 = project_path + '\\Interactive Music Hierarchy'
+    used_ids = []
+
+    # 遍历包含音频源文件的wwu文件（都在以下两个文件夹内）
+    for root, dirs, files in os.walk(wwu_path1):
+        for file in files:
+            base_name, ext = os.path.splitext(file)
+            if ext == ".wwu":
+                wwu_data = parse(os.path.join(root, file))
+                root_node = wwu_data.documentElement
+                nodes = root_node.getElementsByTagName('AudioFileSource')
+                for node in nodes:
+                    used_ids.append(node.getAttribute('ID'))
+    for root, dirs, files in os.walk(wwu_path2):
+        for file in files:
+            base_name, ext = os.path.splitext(file)
+            if ext == ".wwu":
+                wwu_data = parse(os.path.join(root, file))
+                root_node = wwu_data.documentElement
+                nodes = root_node.getElementsByTagName('AudioFileSource')
+
+                for node in nodes:
+                    used_ids.append(node.getAttribute('ID'))
+
+    # 根据wwu文件获得项目使用的音频资源的路径
+    args_wwu = {
+        "from": {
+            "id": used_ids
+        }
+    }
+    opts_wwu = {
+        "return": [
+            "name", "sound:originalWavFilePath"
+        ]
+    }
+    used_paths = []
+    wwu_results = client.call("ak.wwise.core.object.get", args_wwu, options=opts_wwu)['return']
+    for r in wwu_results:
+        used_paths.append(r.get('sound:originalWavFilePath'))
+    used_paths = list(set(used_paths))
+    if used_paths:
+        used_paths = [p.lower() for p in used_paths]  # 对路径小写处理（由于WWAPI的bug，返回的路径大小写会出错）
+    unused_paths = get_unused_paths(used_paths)
+    gui(unused_paths)
+```
+wwu（Wwise Work Unit） 文件包含与工程中特定部分或元素相关的信息（本质是 xml 文件），我们先通过 WAAPI 获得当前工程的根路径，进而得到 Actor-Mixer Hierarchy 和 Interactive Music Hierarchy 这两个层级下的 wwu 文件。搜索这些文件就可以找到工程正在使用的音频文件的 id 信息，再通过这些 id 使用`ak.wwise.core.object.get` API 就可以找到这些文件的路径。
 
 ```py
 # 使用WAQL方法（针对Wwise 2021及以上版本）
@@ -433,5 +538,34 @@ def waql():
     unused_paths = get_unused_paths(used_paths)
     gui(unused_paths)
 ```
+针对 21 及以上版本，本方法主要通过在`ak.wwise.core.object.get` API 的参数中直接使用 WAQL 搜索已使用音频文件的相关信息，要注意的是需要过滤掉返回 result 包含的 plugins 的内容。相较之下，这个方法由于不需对文件进行读取，效率更高。
 
-# 文章正在施工中！！
+```py
+# 对比\SFX及\Voices路径下的文件列表和项目已使用的文件列表获得未使用资源的列表
+def get_unused_paths(used_paths):
+    unused_paths = []
+    for root, dirs, files in os.walk(originals_path + '\\SFX'):
+        for file in files:
+            base_name, ext = os.path.splitext(file)
+            if ext == ".wav":
+                cur_path = os.path.join(root, file)
+                cur_path_lower = cur_path.lower()
+                if used_paths.count(cur_path_lower) == 0:
+                    unused_paths.append(cur_path)
+
+    for root, dirs, files in os.walk(originals_path + '\\Voices'):
+        for file in files:
+            base_name, ext = os.path.splitext(file)
+            if ext == ".wav":
+                cur_path = os.path.join(root, file)
+                cur_path_lower = cur_path.lower()
+                if used_paths.count(cur_path_lower) == 0:
+                    unused_paths.append(cur_path)
+
+    return unused_paths
+```
+
+在获得了工程中正在使用的音频文件的路径后，对比资源文件夹中全部的音频文件就可以得到未在使用中的文件的路径。
+
+![](/img/Wwise-delete-wav.png)
+
