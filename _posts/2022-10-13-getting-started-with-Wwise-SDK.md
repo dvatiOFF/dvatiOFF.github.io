@@ -404,6 +404,34 @@ def search_unused_files(path):
 
 在 Wwise 客户端中打开 File Manager（Shift + F1），在 Source Files 选项卡中会显示各资源的使用情况，可以编写工具实现对 Usage 使用情况为 Not In Use 的冗余 SFX 资源的一键删除。
 
+![](/img/Wwise-delete-wav.png)
 
+```py
+# 使用WAQL方法（针对Wwise 2021及以上版本）
+def waql():
+    args_all_audio = {
+        "waql": "$ from type audiofilesource"
+    }
+    opts_all_audio = {
+        "return": [
+            "originalWavFilePath",
+            "type"
+        ]
+    }
+    results = client.call("ak.wwise.core.object.get", args_all_audio, options=opts_all_audio)['return']
+
+    # 由于返回的result是list嵌套dist，删除插件源等没有音频源的项返回的空字典并将dict转化为list
+    while {} in results:
+        results.remove({})
+    used_paths = []
+    for r in results:
+        used_paths.append(r.get('originalWavFilePath'))
+    used_paths = list(set(used_paths))
+    if used_paths:
+        used_paths = [p.lower() for p in used_paths]  # 小写处理，理由同上
+
+    unused_paths = get_unused_paths(used_paths)
+    gui(unused_paths)
+```
 
 # 文章正在施工中！！
