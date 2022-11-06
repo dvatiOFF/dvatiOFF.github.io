@@ -400,5 +400,10 @@ def search_unused_files(path):
 
 ### 删除冗余的 wav 文件
 
+![](/img/Wwise-file-manager.png)
+
+在 Wwise 客户端中打开 File Manager（Shift + F1），在 Source Files 选项卡中会显示各资源的使用情况，可以编写工具实现对 Usage 使用情况为 Not In Use 的冗余 SFX 资源的一键删除。
+
+
 
 # 文章正在施工中！！
