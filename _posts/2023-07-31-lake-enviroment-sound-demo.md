@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "湖泊环境声快速实现"
-subtitle: "Rapid implementation of lake environmental sound"
+subtitle: "Rapid Implementation of Lake Ambient Sound"
 author: "OFF"
 header-img:   "img/LakeEnviro-bg.png"
 header-mask:  0.3
