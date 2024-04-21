@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "Wwise RTPC 插值曲线复现"
-subtitle: "Reproduction of Wwise RTPC Interpolation Curves"
+title: "Wwise RTPC 十种插值曲线的复现"
+subtitle: "Reproduction of 10 Wwise RTPC Interpolation Curves"
 author: "OFF"
 header-img:   "img/RTPCCurve-bg.png"
 header-mask:  0.3
@@ -10,7 +10,7 @@ tags:
   - Interpolation Curves
 ---
 
-本文（水一期） Wwise RTPC 插值曲线的复现，契机是项目移植受限，需要手搓部分 Wwise 的特性。在没有源码的参考的情况下想要完全 1:1 复现 Wwise 中的十种曲线，虽然涉及的知识仅限初中数学难度，但做的时候发现这更像一种费时的体力活...
+本文（水一期） Wwise RTPC 插值曲线的复现，契机是项目移植受限，需要手搓部分 Wwise 的特性。在没有源码的参考的情况下想要完全 1:1 复现 Wwise 中的十种曲线，虽然涉及的知识仅限初中数学难度，但做的时候发现这更像一种费时的解谜和体力活...
 
 
 Wwise RTPC 的 Curve 属性包含了十种类型的插值曲线，这十种曲线在 Authoring 中、wwu 文件内、以及官方文档中的显示名称都自成一派（幽默一致性）。
@@ -20,14 +20,14 @@ Wwise RTPC 的 Curve 属性包含了十种类型的插值曲线，这十种曲�
 
 | 	Authoring   | 官方文档 | WAAPI   |
 |:--------|:-------|:--------|
-| Logarithmic (Base 3)" | 0 - Logarithmic (Base 3)" | Log3 |
+| Logarithmic (Base 3) | 0 - Logarithmic (Base 3) | Log3 |
 | Sine (Contant Power Fade In) | 1 - Sine | Log2 |
 | Logarithmic (Base 1.41) | 2 - Logarithmic (Base 1.41) | Log1 |
 | Inverted S-Curve | 3 - Inverted S-Curve | InvertedSCurve |
 | Linear | 4 - Linear | Linear |
 | S-Curve | 5 - S-Curve | SCurve |
 | Exponential (Base 1.41) | 6 - Exponential (Base 1.41) | Exp1 |
-| Reciprocal Sine | 7 - Reciprocal Sine | Exp2 |
+| Sine (Contant Power Fade Out) | 7 - Reciprocal Sine | Exp2 |
 | Exponential (Base 3) | 8 - Exponential (Base 3) | Exp3 |
 | Constant |  | Constant |
 
@@ -68,12 +68,14 @@ Wwise RTPC 的 Curve 属性包含了十种类型的插值曲线，这十种曲�
 ## Log & Exp
 在 [GeoGebra](https://www.geogebra.org/graphing) 中画了半天各种对数和指数函数，最终怎么都无法和 Authoring 中的曲线图拟合，最后崩溃发现它们的真面目竟然都是**幂函数**...
 
-总之经过反复试错，这两大类共 4 种曲线（Log3,Log1,Exp3,Exp1），是由幂函数在**限定值域**下通过**横纵放缩**及**平移、翻转变换**得来的，曲线图如下：
+总之经过反复试错，这两大类共 4 种曲线（Log3,Log1,Exp3,Exp1），是由幂函数在以起止点框定的**限定值域**下，通过**横纵放缩**将基函数恰好放入以起止点为斜边的矩形中，最后经过**平移、翻转变换**得来的，曲线图如下：
+![](/img/RTPCCurve-1.png)
 
 
 ### Exp3
-基函数: y = x^3 x ∈ [0, t]
+基函数: y = x^3 x ∈ [0, t] t = |y2 - y1|
 根据起止点的坐标对基函数进行放缩和翻转得到。
+拟合度: 100%
 ```csharp
 public static float Exp3(float x1, float y1, float x2, float y2, float x)
 {
@@ -93,8 +95,9 @@ public static float Exp3(float x1, float y1, float x2, float y2, float x)
 }
 ```
 ### Exp1
-基函数: y = x^1.41 x ∈ [-t, 0]
+基函数: y = x^1.41 y ∈ [-t, 0] t = |y2 - y1|
 根据起止点的坐标对基函数进行放缩和翻转得到。
+拟合度: 100%
 ```csharp
 public static float Exp1(float x1, float y1, float x2, float y2, float x)
 {
@@ -113,8 +116,9 @@ public static float Exp1(float x1, float y1, float x2, float y2, float x)
 }
 ```
 ### Log3
-基函数: y = x^1/3 x ∈ [0, t] (Exp3 的反函数)
+基函数: y = x^1/3 y ∈ [0, t] t = |y2 - y1| (Exp3 的反函数)
 根据起止点的坐标对基函数进行放缩和翻转得到。
+拟合度: 100%
 ```csharp
 public static float Log3(float x1, float y1, float x2, float y2, float x)
 {
@@ -138,8 +142,9 @@ public static float Log3(float x1, float y1, float x2, float y2, float x)
 }
 ```
 ### Log1
-基函数: y = x^1/3 x ∈ [0, t] (Exp1.41 的反函数)
+基函数: y = x^1/3 y ∈ [0, t] t = |y2 - y1| (Exp1.41 的反函数)
 由于该函数定义域不能小于 0，手动定义一函数使其定义域和值域与基函数相反，再根据起止点的坐标对基函数进行放缩和翻转得到。
+拟合度: 100%
 ```csharp
 public static float Log1(float x1, float y1, float x2, float y2, float x)
 {
@@ -178,5 +183,166 @@ public static float Log1(float x1, float y1, float x2, float y2, float x)
     }
 }
 ```
+## Sine
+接着我们将得出另一著名的 Wwise 等式： Sine = Log2。和上面类似，只不过由于 Sine 的值域限制，这里需要先额外进行一次 y 轴缩放，再进行 x 轴缩放。
+### Sine
+基函数: y = sinx x ∈ [0, pi/2]
+根据起止点的坐标对基函数进行放缩和翻转得到。
+拟合度: 100%
+```csharp
+public static float Exp2(float x1, float y1, float x2, float y2, float x)
+{
+    // Sine (Constant Power Fade out)
+    float delta_x = x2 - x1;
+    float delta_y = y2 - y1;
+    float abs_x = Mathf.Abs(delta_x);
+    float abs_y = Mathf.Abs(delta_y);
 
+    float normalizedPosition = Mathf.PI / 2 * (x - x1 - delta_x) / abs_x;
+    float sineValue = Mathf.Sin(normalizedPosition);
+
+    if (delta_y < 0)
+    {
+        return -abs_y * sineValue + delta_y;
+    }
+    else
+    {
+        return abs_y * sineValue + delta_y;
+    }
+}
+```
+### Reciprocal Sine
+基函数: y = sinx x ∈ [-pi/2, 0]
+根据起止点的坐标对基函数进行放缩和翻转得到。
+拟合度: 100%
+```csharp
+public static float Log2(float x1, float y1, float x2, float y2, float x)
+{
+    // Sine (Constant Power Fade in)
+    float delta_x = x2 - x1;
+    float delta_y = y2 - y1;
+    float abs_x = Mathf.Abs(delta_x);
+    float abs_y = Mathf.Abs(delta_y);
+
+    float normalizedPosition = Mathf.PI / 2 * (x - x1) / abs_x;
+    float sineValue = Mathf.Sin(normalizedPosition);
+
+    if (delta_y < 0)
+    {
+        return -abs_y * sineValue + y1;
+    }
+    else
+    {
+        return abs_y * sineValue + y1;
+    }
+}
+
+```
+## Constant & Linear
+最简单的一集，注意左闭右开边界判定。
+### Constant
+拟合度: 100%
+```csharp
+public static float Constant(float x1, float y1, float x2, float y2, float x)
+{
+    // Constant
+    if (x != x2)
+    {
+        return y1;
+    }
+    return y2;
+}
+```
+### Linear
+拟合度: 100%
+```csharp
+public static float Linear(float x1, float y1, float x2, float y2, float x)
+{
+    // Linear
+    float deltaX = x2 - x1;
+    float deltaY = y2 - y1;
+    float slope = deltaY / deltaX;
+
+    if (deltaY < 0)
+    {
+        return -slope * (x - x1) + y1;
+    }
+    else
+    {
+        return slope * (x - x1) + y1;
+    }
+}
+```
 ## SCurve
+由于 Sigmoid 函数的类型太多，无法一一试验，选择调整最常见的 Logistic 的系数来进行拟合，这部分的结果没有完全拟合 Wwise 官方的插值曲线。由于 Logistic 的值域为 (0, 1)，对于两个边界条件还需手动判定，而整体曲线一定不光滑，趋近边界的部分一定会有突变，这一点在放大 Wwise Authoring 中的曲线后也能得到印证。
+![](/img/RTPCCurve-2.png)
+![](/img/RTPCCurve-3.png)
+### SCurve
+
+```csharp
+public static float SCurve(float x1, float y1, float x2, float y2, float x)
+{
+    // S-Curve
+    if (x == x1)
+    {
+        return y1;
+    }
+    if (x == x2)
+    {
+        return y2;
+    }
+    float mid_x = (x1 + x2) / 2;
+    float scale_x = (x2 - x1) / 2;
+    float t = (x - mid_x) / scale_x;
+    float logistic_value = 1 / (1 + Mathf.Exp(-5.89f * t));
+
+    return (y2 - y1) * logistic_value + y1;
+}
+```
+### InvertedSCurve
+
+```csharp
+public static float InvertedSCurve(float x1, float y1, float x2, float y2, float x)
+{
+    // Inverted S-Curve
+    float ori_x = x;
+    if (x == x1)
+    {
+        return y1;
+    }
+    if (x == x2)
+    {
+        return y2;
+    }
+
+    float delta_x = x2 - x1;
+    float delta_y = y2 - y1;
+    float mid_x = (x1 + x2) / 2;
+    float scale_x = (x2 - x1) / 2;
+
+    if (x < mid_x)
+    {
+        x = x + delta_x / 2;
+    }
+    else if (x > mid_x)
+    {
+        x = x - delta_x / 2;
+    }
+    else
+    {
+        return delta_y / 2 + y1; // Adjusted to return the correct middle value based on y1
+    }
+
+    float t = (x - mid_x) / scale_x;
+    float logistic_value = 1 / (1 + Mathf.Exp(-3.5f * t));
+
+    if (ori_x < mid_x)
+    {
+        return (y2 - y1) * logistic_value + y1 - delta_y / 2;
+    }
+    else
+    {
+        return (y2 - y1) * logistic_value + y1 + delta_y / 2;
+    }
+}
+```
