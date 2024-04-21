@@ -275,7 +275,7 @@ public static float Linear(float x1, float y1, float x2, float y2, float x)
 ```
 ## SCurve
 由于 Sigmoid 函数的类型太多，无法一一试验，选择调整最常见的 Logistic 的系数来进行拟合，这部分的结果没有完全拟合 Wwise 官方的插值曲线。由于 Logistic 的值域为 (0, 1)，对于两个边界条件还需手动判定，而整体曲线一定不光滑，趋近边界的部分一定会有突变，这一点在放大 Wwise Authoring 中的曲线后也能得到印证。
-![](/img/RTPCCurve-2.png)
+![](/img/RTPCCurve-4.png)
 ![](/img/RTPCCurve-3.png)
 ### SCurve
 
