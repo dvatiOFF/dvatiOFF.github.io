@@ -74,7 +74,7 @@ ga_domain: dvatioff.space
 
 # Sidebar settings
 sidebar: true # whether or not using Sidebar.
-sidebar-about-description: "努力成为技术艺术双修的 TA <br> All ears to you :)"
+sidebar-about-description: "技艺双修"
 sidebar-avatar: /img/portrait-dvatiOFF.jpg # use absolute URL, seeing it's used in both `/` and `/about/`
 
 # Featured Tags
