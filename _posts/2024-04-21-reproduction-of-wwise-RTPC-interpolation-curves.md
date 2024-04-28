@@ -411,17 +411,20 @@ public static float InvertedSCurve(float x1, float y1, float x2, float y2, float
 ```
 
 ## 响度——非线性变化的 y 轴
-参数驱动响度变化的 RTPC 在绝大多数情况下都会使用非线性变换的 y 轴，虽然如此，但目的却是为了模拟出事实上线性的响度变化以符合人耳真实的听觉感受变化。为此我们需要根据下图对上述函数计算求得的 y（响度值）做一变换，来映射至非线性变换的 y 轴中：
+参数驱动响度变化的 RTPC 在绝大多数情况下都会使用非线性变换的 y 轴，虽然如此，但目的却是为了模拟出事实上线性的响度变化以符合人耳真实的听觉感受变化。为此我们需要根据下图通过 (0, -200) 和 (100, 0) 的直线和曲线，对上述函数计算求得的 y（响度值）做一变换，来映射至非线性变换的 y 轴中。
+直线函数： y = 2 * (x - 100)
+曲线函数： y = 20 * log10(x / 100)
+由于上述直线和曲线的仿射不变性，因此不必考虑定义域改变带来的变化。
 ![](/img/RTPCCurve-6.png)
 具体函数如下，t 为上述函数求得的 y 值：
 ```csharp
-public static float YScalingChange(float t)
+public static float YScalingChange(float t, float delta_x)
 {
     if (t > 0)
     {
         t = -t;
     }
-    float argument = (t / 2.0f + 100) / 100.0f;
+    float argument = (t / 2.0f + delta_x) / delta_x;
     float log10Result = Mathf.Log(argument) / Mathf.Log(10);
     float result = 20 * log10Result;
     if (t > 0)
