@@ -80,6 +80,14 @@ Wwise RTPC 的 Curve 属性包含了十种类型的插值曲线，这十种曲�
 public static float Exp3(float x1, float y1, float x2, float y2, float x)
 {
     // Exponential (Base 3)
+	if (x == x1)
+    {
+        return y1;
+    }
+    if (x == x2)
+    {
+        return y2;
+    }
     float abs_x = Mathf.Abs(x2 - x1);
     float abs_y = Mathf.Abs(y2 - y1);
     float scale = Mathf.Pow(abs_x, 3) / abs_y;
@@ -102,6 +110,14 @@ public static float Exp3(float x1, float y1, float x2, float y2, float x)
 public static float Exp1(float x1, float y1, float x2, float y2, float x)
 {
     // Exponential (Base 1.41)
+	if (x == x1)
+    {
+        return y1;
+    }
+    if (x == x2)
+    {
+        return y2;
+    }
     float abs_x = Mathf.Abs(x2 - x1);
     float abs_y = Mathf.Abs(y2 - y1);
     float scale = Mathf.Pow(abs_x, 1.41f) / abs_y;
@@ -123,6 +139,14 @@ public static float Exp1(float x1, float y1, float x2, float y2, float x)
 public static float Log3(float x1, float y1, float x2, float y2, float x)
 {
     // # Logarithmic(Base 3)
+	if (x == x1)
+    {
+        return y1;
+    }
+    if (x == x2)
+    {
+        return y2;
+    }
     float delta_x = x2 - x1;
     float delta_y = y2 - y1;
     float abs_x = Mathf.Abs(delta_x);
@@ -149,6 +173,14 @@ public static float Log3(float x1, float y1, float x2, float y2, float x)
 public static float Log1(float x1, float y1, float x2, float y2, float x)
 {
     // Logarithmic(Base 1.41)
+	if (x == x1)
+    {
+        return y1;
+    }
+    if (x == x2)
+    {
+        return y2;
+    }
     float delta_x = x2 - x1;
     float delta_y = y2 - y1;
     float abs_x = Mathf.Abs(delta_x);
@@ -193,6 +225,14 @@ public static float Log1(float x1, float y1, float x2, float y2, float x)
 public static float Exp2(float x1, float y1, float x2, float y2, float x)
 {
     // Sine (Constant Power Fade out)
+	if (x == x1)
+    {
+        return y1;
+    }
+    if (x == x2)
+    {
+        return y2;
+    }
     float delta_x = x2 - x1;
     float delta_y = y2 - y1;
     float abs_x = Mathf.Abs(delta_x);
@@ -219,6 +259,14 @@ public static float Exp2(float x1, float y1, float x2, float y2, float x)
 public static float Log2(float x1, float y1, float x2, float y2, float x)
 {
     // Sine (Constant Power Fade in)
+	if (x == x1)
+    {
+        return y1;
+    }
+    if (x == x2)
+    {
+        return y2;
+    }
     float delta_x = x2 - x1;
     float delta_y = y2 - y1;
     float abs_x = Mathf.Abs(delta_x);
@@ -259,6 +307,14 @@ public static float Constant(float x1, float y1, float x2, float y2, float x)
 public static float Linear(float x1, float y1, float x2, float y2, float x)
 {
     // Linear
+	if (x == x1)
+    {
+        return y1;
+    }
+    if (x == x2)
+    {
+        return y2;
+    }
     float deltaX = x2 - x1;
     float deltaY = y2 - y1;
     float slope = deltaY / deltaX;
@@ -351,5 +407,27 @@ public static float InvertedSCurve(float x1, float y1, float x2, float y2, float
     {
         return (y2 - y1) * logistic_value + y1 + delta_y / 2;
     }
+}
+```
+
+## 响度——非线性变化的 y 轴
+参数驱动响度变化的 RTPC 在绝大多数情况下都会使用非线性变换的 y 轴，虽然如此，但目的却是为了模拟出事实上线性的响度变化以符合人耳真实的听觉感受变化。为此我们需要根据下图对上述函数计算求得的 y（响度值）做一变换，来映射至非线性变换的 y 轴中：
+![](/img/RTPCCurve-6.png)
+具体函数如下，t 为上述函数求得的 y 值：
+```csharp
+public static float YScalingChange(float t)
+{
+    if (t > 0)
+    {
+        t = -t;
+    }
+    float argument = (t / 2.0f + 100) / 100.0f;
+    float log10Result = Mathf.Log(argument) / Mathf.Log(10);
+    float result = 20 * log10Result;
+    if (t > 0)
+    {
+        result = -result;
+    }
+    return result; 
 }
 ```
