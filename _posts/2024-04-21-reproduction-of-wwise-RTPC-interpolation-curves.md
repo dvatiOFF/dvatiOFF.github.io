@@ -436,13 +436,13 @@ public static float InvertedSCurve(float x1, float y1, float x2, float y2, float
 ![](/img/RTPCCurve-6.png)
 具体函数如下，t 为上述函数求得的 y 值：
 ```csharp
-public static float YScalingChange(float t, float delta_x)
+public static float YScalingChange(float t)
 {
     if (t > 0)
     {
         t = -t;
     }
-    float argument = (t / 2.0f + delta_x) / delta_x;
+    float argument = (t / 2.0f + 100.0f) / 100.0f;
     float log10Result = Mathf.Log(argument) / Mathf.Log(10);
     float result = 20 * log10Result;
     if (t > 0)
